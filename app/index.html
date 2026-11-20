@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0b0712">
-<meta name="description" content="Vice Cover Studio: turn a photo and a caption into a three-panel GTA-style cover, graded and exported as a PNG. Offline and private.">
+<meta name="description" content="Vice Cover Studio: turn a photo and a caption into a printed key-art one-sheet with a three-panel triptych, cast chips, a title lockup, a seal, a footer band and a billing block. Exports PNG at 1080x1080, 1080x1350 and 1920x1080. Offline and private.">
 <title>Vice Cover Studio</title>
 <link rel="stylesheet" href="./style.css">
 </head>
@@ -62,13 +62,13 @@
         <div class="card">
           <label class="field" for="title">
             <span>Title</span>
-            <input id="title" type="text" maxlength="24" value="VICE CITY" spellcheck="false" autocomplete="off" placeholder="VICE CITY">
+            <input id="title" type="text" maxlength="24" value="NEON TIDE" spellcheck="false" autocomplete="off" placeholder="NEON TIDE">
           </label>
           <label class="field" for="kicker">
             <span>Kicker</span>
-            <input id="kicker" type="text" maxlength="36" value="A VICE BEACH STORY" spellcheck="false" autocomplete="off" placeholder="A VICE BEACH STORY">
+            <input id="kicker" type="text" maxlength="36" value="ONE BEACH. ONE NIGHT." spellcheck="false" autocomplete="off" placeholder="ONE BEACH. ONE NIGHT.">
           </label>
-          <p class="field-note">Use <b>|</b> to split the title onto two lines.</p>
+          <p class="field-note">Use <b>|</b> to split the title onto two lines. The lockup spans the panel seams.</p>
         </div>
       </section>
 
@@ -117,14 +117,25 @@
       </section>
 
       <section class="rail-section">
-        <h2 class="section-head"><span>Export</span><span class="section-note">PNG &middot; no crop</span></h2>
+        <h2 class="section-head"><span>Finish</span><span class="section-note">cover package</span></h2>
+        <div class="card">
+          <label class="switch-row" for="poster-extras">
+            <span class="switch"><input id="poster-extras" type="checkbox" checked><i aria-hidden="true"></i></span>
+            <span>Poster extras</span>
+          </label>
+          <p class="field-note">Cast tags, pull quote, seal, footer band and billing block.</p>
+        </div>
+      </section>
+
+      <section class="rail-section">
+        <h2 class="section-head"><span>Export</span><span class="section-note">PNG &middot; full bleed</span></h2>
         <div class="card export-card">
           <div class="format-grid" role="group" aria-label="Export format">
             <button type="button" data-format="square" aria-pressed="false"><b>Square</b><small>1080 &times; 1080</small></button>
             <button type="button" data-format="portrait" aria-pressed="false"><b>Portrait</b><small>1080 &times; 1350</small></button>
             <button type="button" data-format="wide" class="is-active" aria-pressed="true"><b>Wide</b><small>1920 &times; 1080</small></button>
           </div>
-          <p class="export-status" id="export-status" role="status">Ready &middot; photos stay on this device</p>
+          <p class="export-status" id="export-status" role="status">Ready &middot; pick a size and export</p>
         </div>
       </section>
     </aside>
@@ -132,7 +143,7 @@
     <section class="stage-shell" aria-label="Cover preview">
       <div class="stage" id="stage">
         <div class="canvas-shell" id="canvas-shell">
-          <canvas id="cover" width="1200" height="675" aria-label="Three-panel GTA-style cover preview"></canvas>
+          <canvas id="cover" width="1200" height="675" tabindex="0" aria-label="Three-panel key-art cover preview. Use arrow keys to move the selected panel."></canvas>
           <div class="drop-veil" id="drop-veil" aria-hidden="true"><span>Drop photo to place</span></div>
         </div>
         <div class="stage-strip">
@@ -143,7 +154,6 @@
           <span>PNG</span>
           <span class="strip-spacer"></span>
           <span id="stage-status">Drag a panel to reframe</span>
-          <span class="strip-ms" id="render-ms"></span>
         </div>
       </div>
     </section>

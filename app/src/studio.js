@@ -39,13 +39,15 @@ let layout = null;
 let frameRequest = 0;
 let drag = null;
 let exporting = false;
+let hoverPanel = -1;
 
 const state = {
   format: 'wide',
   grade: 'sunset',
-  title: 'VICE CITY',
-  kicker: 'A VICE BEACH STORY',
+  title: 'NEON TIDE',
+  kicker: 'ONE BEACH. ONE NIGHT.',
   selected: 1,
+  extras: true,
   panels: panelsFor('boulevard'),
   photos,
 };
@@ -105,9 +107,9 @@ function renderNow() {
     width: dims.width,
     height: dims.height,
     selected: coverOnly ? undefined : state.selected,
+    showHandles: !coverOnly && hoverPanel === state.selected,
   });
-  const elapsed = performance.now() - started;
-  $('render-ms').textContent = `${Math.round(elapsed)} ms`;
+  window.__renderMs = Math.round(performance.now() - started);
 }
 
 function scheduleRender() {
@@ -178,6 +180,8 @@ function sync() {
     button.setAttribute('aria-pressed', String(active));
   });
 
+  $('poster-extras').checked = state.extras;
+
   const format = currentFormat();
   $('export-dims').textContent = formatDims();
   $('stage-format').textContent = `${format.label} ${format.ratio}`;
@@ -210,6 +214,15 @@ function setFormat(formatId) {
   scheduleRender();
   setStatus(`${currentFormat().label} selected \u00b7 ${formatDims()} PNG`, {
     stage: `${currentFormat().label} \u00b7 ${formatDims()}`,
+  });
+}
+
+function setExtras(enabled) {
+  state.extras = Boolean(enabled);
+  sync();
+  scheduleRender();
+  setStatus(state.extras ? 'Poster extras on \u00b7 full cover package' : 'Poster extras off \u00b7 art and type only', {
+    stage: state.extras ? 'Cover package on' : 'Cover package off',
   });
 }
 
@@ -327,6 +340,7 @@ function bindCanvas() {
     const index = panelAt(point);
     if (index < 0) return;
     setPanel(index);
+    hoverPanel = index;
     const rect = layout.panels[index];
     drag = {
       index,
@@ -346,7 +360,12 @@ function bindCanvas() {
   canvas.addEventListener('pointermove', (event) => {
     const point = canvasPoint(event);
     if (!drag) {
-      canvas.style.cursor = panelAt(point) >= 0 ? 'grab' : 'default';
+      const index = panelAt(point);
+      if (index !== hoverPanel) {
+        hoverPanel = index;
+        scheduleRender();
+      }
+      canvas.style.cursor = index >= 0 ? 'grab' : 'default';
       return;
     }
     const rect = canvas.getBoundingClientRect();
@@ -371,7 +390,19 @@ function bindCanvas() {
   canvas.addEventListener('pointerup', endDrag);
   canvas.addEventListener('pointercancel', endDrag);
   canvas.addEventListener('pointerleave', () => {
-    if (!drag) canvas.style.cursor = 'default';
+    if (!drag) {
+      hoverPanel = -1;
+      canvas.style.cursor = 'default';
+      scheduleRender();
+    }
+  });
+  canvas.addEventListener('focus', () => {
+    hoverPanel = state.selected;
+    scheduleRender();
+  });
+  canvas.addEventListener('blur', () => {
+    if (hoverPanel === state.selected) hoverPanel = -1;
+    scheduleRender();
   });
 
   for (const type of ['dragenter', 'dragover']) {
@@ -463,6 +494,7 @@ function bindControls() {
 
   $('reset-panel').addEventListener('click', resetPanel);
   $('surprise').addEventListener('click', surprise);
+  $('poster-extras').addEventListener('change', (event) => setExtras(event.target.checked));
   exportButton.addEventListener('click', runExport);
 
   $('upload-btn').addEventListener('click', () => fileInput.click());
@@ -553,7 +585,7 @@ async function init() {
   if (!loaded) {
     setStatus('Sample photos did not load. Upload your own to begin.', { error: true });
   } else {
-    setStatus('Ready \u00b7 photos stay on this device', { stage: 'Drag a panel to reframe' });
+    setStatus('Ready \u00b7 pick a size and export', { stage: 'Drag a panel to reframe' });
   }
 
   const params = new URLSearchParams(window.location.search);

@@ -16,6 +16,23 @@ function saveBlob(blob, name) {
   setTimeout(() => URL.revokeObjectURL(url), 2500);
 }
 
+/** A filesystem-safe slug of the editable title, e.g. "NEON TIDE" -> "neon-tide". */
+export function slugFor(title) {
+  const slug = String(title || '')
+    .toLowerCase()
+    .replace(/[|]+/g, ' ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 42)
+    .replace(/-+$/g, '');
+  return slug || 'cover';
+}
+
+/** Informative download name: title, format and exact dimensions. */
+export function fileNameFor(state, format) {
+  return `${slugFor(state.title)}-${format.id}-${format.width}x${format.height}.png`;
+}
+
 export function formatBytes(bytes) {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
@@ -29,9 +46,10 @@ export async function exportPng(state, formatId) {
   const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
   if (!blob) throw new Error('The browser could not encode the PNG.');
   const elapsed = Math.max(1, Math.round(performance.now() - started));
-  saveBlob(blob, format.file);
+  const name = fileNameFor(state, format);
+  saveBlob(blob, name);
   return {
-    name: format.file,
+    name,
     bytes: blob.size,
     ms: elapsed,
     width: format.width,

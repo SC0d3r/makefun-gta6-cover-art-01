@@ -1,2 +1,5 @@
 ocdata/
+ocdata-b3/
 out/
+*.log
+*.tmp

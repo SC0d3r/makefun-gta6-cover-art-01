@@ -1,11 +1,12 @@
 // Vice Cover Studio (gta6-cover-art-01): the app is this directory's app/ folder, plain static files a desktop
 // browser loads offline (app/index.html and its ES modules, no library, no network request), and this program
 // hands it in. It copies app/ and screenshots/ from beside this file to /output and writes /output/dossier.json,
-// the summary the judge reads, with the vendored make.fun library. The app itself is a single-page cover studio:
-// three deliberate framings of a photo make a GTA-style triptych, with per-panel crop and zoom, a Sunset, Neon
-// or Dusk grade, oversized system-font lettering and a kicker, and PNG export at 1080x1080, 1080x1350 and
-// 1920x1080. Its two sample photos (app/samples/) were made for make.fun with an image model and are free to use.
-// All photos stay in the browser; nothing is uploaded.
+// the summary the judge reads, with the vendored make.fun library. The app itself is a single-page key-art studio:
+// three deliberate framings of a photo make a triptych, with per-panel crop and zoom, a Sunset, Neon or Dusk grade,
+// a two-layer title lockup over the panel seams, cast chips, a pull quote, a starburst seal, a cream footer band,
+// a billing block, a barcode and a halftone print finish. A FINISH toggle hides or shows the package, and PNG
+// export works at 1080x1080, 1080x1350 and 1920x1080. Its two sample photos (app/samples/) were made for make.fun
+// with an image model and are free to use. All photos stay in the browser; nothing is uploaded.
 //
 // Serve it locally with `node serve.ts`, then open http://localhost:8080.
 // Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:
