@@ -1,5 +1,6 @@
 [
-  { "name": "1-cover.jpg", "query": "?shot=cover&photo=pier&caption=Sunset%20Heist", "w": 1080, "h": 1080 },
-  { "name": "2-editor.jpg", "query": "?shot=editor&photo=boulevard&caption=Boulevard%20Queen", "w": 1280, "h": 720 },
-  { "name": "3-cover.jpg", "query": "?shot=cover&photo=boulevard&caption=Boulevard%20Queen", "w": 1080, "h": 1080 }
+  { "name": "1-hero.jpg", "query": "?shot=cover&format=wide&photo=boulevard&title=VICE%20CITY&kicker=A%20VICE%20BEACH%20STORY&style=sunset&preset=hero", "w": 1280, "h": 720 },
+  { "name": "2-editor.jpg", "query": "?shot=editor&format=wide&photo=boulevard&title=VICE%20CITY&kicker=A%20VICE%20BEACH%20STORY&style=sunset&preset=hero&panel=1", "w": 1280, "h": 720 },
+  { "name": "3-square.jpg", "query": "?shot=cover&format=square&photo=pier&title=THE%20CATCH&kicker=A%20VICE%20BEACH%20STORY&style=neon&preset=pier", "w": 1080, "h": 1080 },
+  { "name": "4-portrait.jpg", "query": "?shot=cover&format=portrait&photo=boulevard&title=OCEAN%20DRIVE&kicker=NO%20RULES%20JUST%20SUNSET&style=dusk&preset=portrait", "w": 1024, "h": 1280 }
 ]
