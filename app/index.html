@@ -3,138 +3,153 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#0c0714">
-<meta name="description" content="Vice Cover Studio: turn any photo into a multi-panel GTA-style cover with a Vice City sunset grade. Offline, private, exported as PNG.">
+<meta name="theme-color" content="#0b0712">
+<meta name="description" content="Vice Cover Studio: turn a photo and a caption into a three-panel GTA-style cover, graded and exported as a PNG. Offline and private.">
 <title>Vice Cover Studio</title>
 <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <div class="brand">
-      <span class="brand-dot" aria-hidden="true"></span>
-      <span class="brand-name">VICE COVER</span>
-      <span class="studio-chip">STUDIO</span>
+    <div class="brand" aria-label="Vice Cover Studio">
+      <span class="brand-mark" aria-hidden="true">V</span>
+      <span class="brand-word">VICE COVER</span>
+      <span class="brand-studio">STUDIO</span>
     </div>
     <div class="top-actions">
-      <button class="ghost-btn" id="surprise" type="button" title="Random grade, title and crops">Surprise me</button>
-      <span class="privacy"><span class="privacy-mark" aria-hidden="true"></span>Photos never leave this device.</span>
-      <button class="primary-btn" id="export-top" type="button">Export PNG<span class="btn-pixels" id="export-dims">1920 x 1080</span></button>
+      <button class="ghost-btn" id="surprise" type="button">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.2l1.4 4.1 4.1 1.4-4.1 1.4L8 12.2 6.6 8.1 2.5 6.7l4.1-1.4L8 1.2zM13 11l.7 2.1 2.1.7-2.1.7L13 16.6l-.7-2.1-2.1-.7 2.1-.7L13 11z"/></svg>
+        Surprise me
+      </button>
+      <span class="privacy"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3.2" y="7" width="9.6" height="7" rx="1.6"/><path d="M5.4 7V5.2a2.6 2.6 0 015.2 0V7"/></svg>100% local &middot; photos never leave this device</span>
+      <button class="primary-btn" id="export-top" type="button">
+        <span>Export PNG</span>
+        <span class="btn-dims" id="export-dims">1920 &times; 1080</span>
+      </button>
     </div>
   </header>
 
   <main class="workspace">
     <aside class="rail" aria-label="Cover controls">
       <section class="rail-section">
-        <h2>Photo</h2>
+        <h2 class="section-head"><span>Photo</span><span class="section-note">samples + yours</span></h2>
         <div class="card">
           <div class="sample-row">
             <button class="sample" type="button" data-sample="boulevard" aria-pressed="false">
-              <img src="samples/boulevard.jpg" alt="" width="48" height="48">
+              <img src="samples/boulevard.jpg" alt="" width="36" height="36">
               <span>Boulevard</span>
             </button>
             <button class="sample" type="button" data-sample="pier" aria-pressed="false">
-              <img src="samples/pier.jpg" alt="" width="48" height="48">
+              <img src="samples/pier.jpg" alt="" width="36" height="36">
               <span>Pier</span>
             </button>
           </div>
-          <label class="upload-btn" for="upload">+ Upload photo</label>
-          <input id="upload" type="file" accept="image/*" hidden>
-          <label class="check-row"><input id="use-all" type="checkbox" checked><span>Use on all panels</span></label>
+          <button class="upload-drop" id="upload-btn" type="button">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 11V3M4.6 6.2L8 2.8l3.4 3.4M2.6 11.4v1.2a1.6 1.6 0 001.6 1.6h7.6a1.6 1.6 0 001.6-1.6v-1.2"/></svg>
+            <span>Upload photo</span>
+            <small>or drop it on the cover</small>
+          </button>
+          <input id="file-input" type="file" accept="image/jpeg,image/png,image/webp,image/gif" hidden>
+          <label class="switch-row" for="use-all">
+            <span class="switch"><input id="use-all" type="checkbox" checked><i aria-hidden="true"></i></span>
+            <span>Use on all panels</span>
+          </label>
         </div>
       </section>
 
       <section class="rail-section">
-        <h2>Caption</h2>
+        <h2 class="section-head"><span>Caption</span><span class="section-note">title + kicker</span></h2>
         <div class="card">
           <label class="field" for="title">
             <span>Title</span>
-            <input id="title" type="text" maxlength="22" value="VICE CITY" spellcheck="false" autocomplete="off" placeholder="VICE CITY">
+            <input id="title" type="text" maxlength="24" value="VICE CITY" spellcheck="false" autocomplete="off" placeholder="VICE CITY">
           </label>
           <label class="field" for="kicker">
             <span>Kicker</span>
-            <input id="kicker" type="text" maxlength="30" value="A VICE BEACH STORY" spellcheck="false" autocomplete="off" placeholder="A VICE BEACH STORY">
+            <input id="kicker" type="text" maxlength="36" value="A VICE BEACH STORY" spellcheck="false" autocomplete="off" placeholder="A VICE BEACH STORY">
           </label>
-          <p class="field-note">Use | to split the title onto two lines.</p>
+          <p class="field-note">Use <b>|</b> to split the title onto two lines.</p>
         </div>
       </section>
 
       <section class="rail-section">
-        <h2>Grade</h2>
+        <h2 class="section-head"><span>Grade</span><span class="section-note">one light</span></h2>
         <div class="card">
           <div class="grade-row" role="group" aria-label="Colour grade">
-            <button class="grade-chip is-active" type="button" data-style="sunset" aria-pressed="true">
-              <span class="grade-dot" style="background:linear-gradient(135deg,#ffc46b,#ff2e8b)"></span>Sunset
+            <button class="grade-chip is-active" type="button" data-grade="sunset" aria-pressed="true">
+              <i class="grade-dot" style="background:linear-gradient(135deg,#ffc46b,#ff3d8d)" aria-hidden="true"></i>Sunset
             </button>
-            <button class="grade-chip" type="button" data-style="neon" aria-pressed="false">
-              <span class="grade-dot" style="background:linear-gradient(135deg,#ff2ea0,#2ee6ff)"></span>Neon
+            <button class="grade-chip" type="button" data-grade="neon" aria-pressed="false">
+              <i class="grade-dot" style="background:linear-gradient(135deg,#ff3d9a,#36e0ff)" aria-hidden="true"></i>Neon
             </button>
-            <button class="grade-chip" type="button" data-style="dusk" aria-pressed="false">
-              <span class="grade-dot" style="background:linear-gradient(135deg,#1d6f7c,#f0a35e)"></span>Dusk
+            <button class="grade-chip" type="button" data-grade="dusk" aria-pressed="false">
+              <i class="grade-dot" style="background:linear-gradient(135deg,#1f7886,#f0a35e)" aria-hidden="true"></i>Dusk
             </button>
           </div>
         </div>
       </section>
 
       <section class="rail-section">
-        <h2>Panels</h2>
+        <h2 class="section-head"><span>Panels</span><span class="section-note" id="panel-meta">Boulevard &middot; centre</span></h2>
         <div class="card">
           <div class="seg" role="group" aria-label="Selected panel">
             <button type="button" data-panel="0" aria-pressed="false">Left</button>
-            <button type="button" data-panel="1" class="is-active" aria-pressed="true">Center</button>
+            <button type="button" data-panel="1" class="is-active" aria-pressed="true">Centre</button>
             <button type="button" data-panel="2" aria-pressed="false">Right</button>
           </div>
-          <p class="panel-meta" id="panel-photo">Boulevard - centre panel</p>
           <div class="slider">
-            <div class="slider-head"><label for="zoom">Zoom</label><output id="zoom-value" for="zoom">1.05</output></div>
-            <input type="range" id="zoom" min="1" max="2.2" step="0.01" value="1.05">
+            <label for="zoom">Zoom</label>
+            <input type="range" id="zoom" min="1" max="2.2" step="0.01" value="1.55">
+            <output id="zoom-value" for="zoom">1.55</output>
           </div>
           <div class="slider">
-            <div class="slider-head"><label for="hx">Horizontal</label><output id="hx-value" for="hx">0.50</output></div>
-            <input type="range" id="hx" min="0" max="1" step="0.01" value="0.5">
+            <label for="hx">Horizontal</label>
+            <input type="range" id="hx" min="0" max="1" step="0.01" value="0.53">
+            <output id="hx-value" for="hx">0.53</output>
           </div>
           <div class="slider">
-            <div class="slider-head"><label for="vy">Vertical</label><output id="vy-value" for="vy">0.12</output></div>
-            <input type="range" id="vy" min="0" max="1" step="0.01" value="0.12">
+            <label for="vy">Vertical</label>
+            <input type="range" id="vy" min="0" max="1" step="0.01" value="0.38">
+            <output id="vy-value" for="vy">0.38</output>
           </div>
-          <button class="link-btn" id="reset-panel" type="button">Reset panel</button>
+          <button class="text-btn" id="reset-panel" type="button">Reset panel framing</button>
         </div>
       </section>
 
       <section class="rail-section">
-        <h2>Export</h2>
+        <h2 class="section-head"><span>Export</span><span class="section-note">PNG &middot; no crop</span></h2>
         <div class="card export-card">
-          <div class="seg format-seg" role="group" aria-label="Export format">
-            <button type="button" data-format="square" aria-pressed="false"><b>Square</b><small>1:1</small></button>
-            <button type="button" data-format="portrait" aria-pressed="false"><b>Portrait</b><small>4:5</small></button>
-            <button type="button" data-format="wide" class="is-active" aria-pressed="true"><b>Wide</b><small>16:9</small></button>
+          <div class="format-grid" role="group" aria-label="Export format">
+            <button type="button" data-format="square" aria-pressed="false"><b>Square</b><small>1080 &times; 1080</small></button>
+            <button type="button" data-format="portrait" aria-pressed="false"><b>Portrait</b><small>1080 &times; 1350</small></button>
+            <button type="button" data-format="wide" class="is-active" aria-pressed="true"><b>Wide</b><small>1920 &times; 1080</small></button>
           </div>
-          <button class="primary-btn wide" id="export" type="button">Export PNG<span class="btn-pixels" id="export-size">1920 x 1080</span></button>
-          <button class="secondary-btn" id="export-all" type="button">Export all three sizes</button>
-          <p class="export-status" id="export-status" role="status">Ready - everything stays on this device.</p>
+          <p class="export-status" id="export-status" role="status">Ready &middot; photos stay on this device</p>
         </div>
       </section>
     </aside>
 
-    <section class="stage-wrap" aria-label="Cover preview">
+    <section class="stage-shell" aria-label="Cover preview">
       <div class="stage" id="stage">
-        <div class="stage-hint">Drop a photo anywhere</div>
-        <div class="frame" id="frame">
-          <canvas id="cover" width="1920" height="1080" aria-label="GTA-style cover preview"></canvas>
+        <div class="canvas-shell" id="canvas-shell">
+          <canvas id="cover" width="1200" height="675" aria-label="Three-panel GTA-style cover preview"></canvas>
+          <div class="drop-veil" id="drop-veil" aria-hidden="true"><span>Drop photo to place</span></div>
         </div>
         <div class="stage-strip">
-          <span class="strip-item" id="strip-format">Wide 16:9</span>
-          <span class="strip-sep">/</span>
-          <span class="strip-item" id="strip-pixels">1920 x 1080 px</span>
-          <span class="png-badge">PNG 1x</span>
+          <span class="strip-strong" id="stage-format">Wide 16:9</span>
+          <span class="strip-dot" aria-hidden="true"></span>
+          <span id="stage-pixels">1920 &times; 1080</span>
+          <span class="strip-dot" aria-hidden="true"></span>
+          <span>PNG</span>
           <span class="strip-spacer"></span>
-          <span class="status-line" id="status" role="status">Ready - everything stays on this device.</span>
+          <span id="stage-status">Drag a panel to reframe</span>
+          <span class="strip-ms" id="render-ms"></span>
         </div>
       </div>
     </section>
   </main>
 </div>
 <noscript>Vice Cover Studio needs JavaScript to draw and export the cover.</noscript>
-<script type="module" src="./src/main.js"></script>
+<script type="module" src="./src/studio.js"></script>
 </body>
 </html>
