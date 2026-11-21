@@ -4,6 +4,9 @@
 
 import { FORMATS, renderExport } from './render.js';
 
+export const EXPORT_MIME = 'image/png';
+export const EXPORT_MAX_BYTES = 262144;
+
 function saveBlob(blob, name) {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
@@ -42,8 +45,9 @@ export function formatBytes(bytes) {
 export async function exportPng(state, formatId) {
   const format = FORMATS[formatId] || FORMATS.wide;
   const started = performance.now();
+  if (document.fonts && document.fonts.ready) await document.fonts.ready;
   const canvas = renderExport(state, format.id);
-  const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+  const blob = await new Promise((resolve) => canvas.toBlob(resolve, EXPORT_MIME));
   if (!blob) throw new Error('The browser could not encode the PNG.');
   const elapsed = Math.max(1, Math.round(performance.now() - started));
   const name = fileNameFor(state, format);

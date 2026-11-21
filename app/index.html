@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0b0712">
-<meta name="description" content="Vice Cover Studio: turn a photo and a caption into a printed key-art one-sheet with a three-panel triptych, cast chips, a title lockup, a seal, a footer band and a billing block. Exports PNG at 1080x1080, 1080x1350 and 1920x1080. Offline and private.">
+<meta name="description" content="Vice Cover Studio: turn photos and a caption into a printed key-art hero mosaic with seven slanted panels, a sunset sky, a huge Anton title, a script subtitle, cast chips, a tagline ribbon, a seal, a star strip, a billing block and a barcode. Exports PNG at 1080x1080, 1080x1350 and 1920x1080. Offline and private.">
 <title>Vice Cover Studio</title>
 <link rel="stylesheet" href="./style.css">
 </head>
@@ -35,13 +35,29 @@
         <h2 class="section-head"><span>Photo</span><span class="section-note">samples + yours</span></h2>
         <div class="card">
           <div class="sample-row">
+            <button class="sample" type="button" data-sample="cast-man" aria-pressed="false">
+              <img src="samples/cast-man.webp" alt="" width="36" height="36">
+              <span>Cast man</span>
+            </button>
+            <button class="sample" type="button" data-sample="cast-driver" aria-pressed="false">
+              <img src="samples/cast-driver.webp" alt="" width="36" height="36">
+              <span>Driver</span>
+            </button>
             <button class="sample" type="button" data-sample="boulevard" aria-pressed="false">
               <img src="samples/boulevard.jpg" alt="" width="36" height="36">
               <span>Boulevard</span>
             </button>
+            <button class="sample" type="button" data-sample="cast-woman" aria-pressed="false">
+              <img src="samples/cast-woman.webp" alt="" width="36" height="36">
+              <span>Cast woman</span>
+            </button>
             <button class="sample" type="button" data-sample="pier" aria-pressed="false">
               <img src="samples/pier.jpg" alt="" width="36" height="36">
               <span>Pier</span>
+            </button>
+            <button class="sample" type="button" data-sample="cast-blonde" aria-pressed="false">
+              <img src="samples/cast-blonde.webp" alt="" width="36" height="36">
+              <span>Blonde</span>
             </button>
           </div>
           <button class="upload-drop" id="upload-btn" type="button">
@@ -90,12 +106,17 @@
       </section>
 
       <section class="rail-section">
-        <h2 class="section-head"><span>Panels</span><span class="section-note" id="panel-meta">Boulevard &middot; centre</span></h2>
+        <h2 class="section-head"><span>Panels</span><span class="section-note" id="panel-meta">Cast man &middot; hero 1</span></h2>
         <div class="card">
-          <div class="seg" role="group" aria-label="Selected panel">
-            <button type="button" data-panel="0" aria-pressed="false">Left</button>
-            <button type="button" data-panel="1" class="is-active" aria-pressed="true">Centre</button>
-            <button type="button" data-panel="2" aria-pressed="false">Right</button>
+          <div class="seg seg-panels" role="group" aria-label="Selected panel">
+            <button type="button" data-panel="0" class="is-active" aria-pressed="true">1</button>
+            <button type="button" data-panel="1" aria-pressed="false">2</button>
+            <button type="button" data-panel="2" aria-pressed="false">3</button>
+            <button type="button" data-panel="3" aria-pressed="false">4</button>
+            <button type="button" data-panel="4" aria-pressed="false">5</button>
+            <button type="button" data-panel="5" aria-pressed="false">6</button>
+            <button type="button" data-panel="6" aria-pressed="false">7</button>
+            <button type="button" data-panel="7" aria-pressed="false">8</button>
           </div>
           <div class="slider">
             <label for="zoom">Zoom</label>
@@ -123,7 +144,7 @@
             <span class="switch"><input id="poster-extras" type="checkbox" checked><i aria-hidden="true"></i></span>
             <span>Poster extras</span>
           </label>
-          <p class="field-note">Cast tags, pull quote, seal, footer band and billing block.</p>
+          <p class="field-note">Cast tags, review strip, seal, ribbon, billing block and barcode.</p>
         </div>
       </section>
 
@@ -143,7 +164,7 @@
     <section class="stage-shell" aria-label="Cover preview">
       <div class="stage" id="stage">
         <div class="canvas-shell" id="canvas-shell">
-          <canvas id="cover" width="1200" height="675" tabindex="0" aria-label="Three-panel key-art cover preview. Use arrow keys to move the selected panel."></canvas>
+          <canvas id="cover" width="1200" height="675" tabindex="0" aria-label="Hero-mosaic key-art cover preview with seven slanted panels. Use the panel buttons to choose a panel, then drag to reframe."></canvas>
           <div class="drop-veil" id="drop-veil" aria-hidden="true"><span>Drop photo to place</span></div>
         </div>
         <div class="stage-strip">

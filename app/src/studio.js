@@ -7,21 +7,34 @@ import {
   GRADE_ORDER,
   GRADES,
   PANEL_LABELS,
+  cropFor,
+  layoutFor,
+  modeFor,
+  panelCountFor,
   previewSize,
   renderCover,
 } from './render.js';
 import {
   CAPTION_KICKER_MAX,
   CAPTION_TITLE_MAX,
+  DEFAULT_CAST,
   LOOKS,
   PRESETS,
   SAMPLES,
-  SAMPLE_ORDER,
-  recipeFor,
+  SAMPLE_ORDER,  recipeFor,
 } from './samples.js';
 import { exportPng, formatBytes } from './export.js';
 
 window.__shotReady = false;
+
+// The four bundled display faces. They are loaded before the first paint and again
+// before export, so canvas lettering never falls back to a system font.
+const FONT_FAMILIES = ['Anton', 'Bebas Neue', 'Mr Dafoe', 'Archivo Black'];
+
+async function loadFonts() {
+  await Promise.all(FONT_FAMILIES.map((family) => document.fonts.load(`32px "${family}"`)));
+  await document.fonts.ready;
+}
 
 const $ = (id) => document.getElementById(id);
 
@@ -46,14 +59,37 @@ const state = {
   grade: 'sunset',
   title: 'NEON TIDE',
   kicker: 'ONE BEACH. ONE NIGHT.',
-  selected: 1,
+  selected: 0,
   extras: true,
-  panels: panelsFor('boulevard'),
+  panels: panelsForCast(DEFAULT_CAST, 'wide'),
   photos,
 };
 
-function panelsFor(photoId) {
-  return recipeFor(photoId).map((crop) => ({ photo: photoId, ...crop }));
+function panelsForCast(cast, formatId) {
+  const mode = modeFor(formatId);
+  const count = panelCountFor(mode);
+  const format = FORMATS[formatId] || FORMATS.wide;
+  const geom = layoutFor(format.width, format.height);
+  const list = cast.length ? cast : DEFAULT_CAST;
+  return Array.from({ length: count }, (_, index) => {
+    const photo = list[Math.min(index, list.length - 1)];
+    const panel = geom.panels[index] || geom.panels[0];
+    return { photo, ...cropFor(panel, photo) };
+  });
+}
+
+function recropPanels() {
+  const mode = modeFor(state.format);
+  const count = panelCountFor(mode);
+  const layout = layoutFor(currentFormat().width, currentFormat().height);
+  state.panels = Array.from({ length: count }, (_, index) => {
+    const base = state.panels[index]
+      || state.panels[state.panels.length - 1]
+      || { photo: DEFAULT_CAST[index] || DEFAULT_CAST[0] };
+    const panel = layout.panels[index] || layout.panels[0];
+    return { photo: base.photo, ...cropFor(panel, base.photo) };
+  });
+  state.selected = clamp(state.selected, 0, count - 1);
 }
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
@@ -147,7 +183,8 @@ function syncSliders() {
 function syncPanelMeta() {
   const panel = state.panels[state.selected];
   const label = SAMPLES[panel.photo]?.label || 'Your photo';
-  $('panel-meta').textContent = `${label} \u00b7 ${['left', 'centre', 'right'][state.selected]}`;
+  const role = PANEL_LABELS[state.selected] || 'PANEL';
+  $('panel-meta').textContent = `${label} \u00b7 ${role.toLowerCase()} ${state.selected + 1}`;
 }
 
 function sync() {
@@ -168,8 +205,9 @@ function sync() {
     button.setAttribute('aria-pressed', String(active));
   });
 
-  document.querySelectorAll('[data-panel]').forEach((button) => {
+  document.querySelectorAll('[data-panel]').forEach((button, index) => {
     const active = Number(button.dataset.panel) === state.selected;
+    button.hidden = index >= state.panels.length;
     button.classList.toggle('is-active', active);
     button.setAttribute('aria-pressed', String(active));
   });
@@ -193,10 +231,10 @@ function sync() {
 // ---------------------------------------------------------------- actions
 
 function setPanel(index) {
-  state.selected = clamp(Number(index) || 0, 0, 2);
+  state.selected = clamp(Number(index) || 0, 0, state.panels.length - 1);
   sync();
   scheduleRender();
-  stageStatus.textContent = `${PANEL_LABELS[state.selected].toLowerCase()} panel \u00b7 drag to reframe`;
+  stageStatus.textContent = `panel ${state.selected + 1} \u00b7 drag to reframe`;
 }
 
 function setGrade(grade) {
@@ -210,6 +248,7 @@ function setGrade(grade) {
 function setFormat(formatId) {
   if (!FORMATS[formatId]) return;
   state.format = formatId;
+  recropPanels();
   sync();
   scheduleRender();
   setStatus(`${currentFormat().label} selected \u00b7 ${formatDims()} PNG`, {
@@ -228,10 +267,12 @@ function setExtras(enabled) {
 
 function applyPhoto(photoId) {
   const all = $('use-all').checked;
-  const targets = all ? [0, 1, 2] : [state.selected];
-  const recipe = recipeFor(photoId);
+  const format = currentFormat();
+  const geom = layoutFor(format.width, format.height);
+  const targets = all ? state.panels.map((_, index) => index) : [state.selected];
   for (const index of targets) {
-    state.panels[index] = { photo: photoId, ...recipe[index] };
+    const panel = geom.panels[index] || geom.panels[0];
+    state.panels[index] = { photo: photoId, ...cropFor(panel, photoId) };
   }
   sync();
   scheduleRender();
@@ -243,8 +284,10 @@ function applyPhoto(photoId) {
 
 function resetPanel() {
   const panel = state.panels[state.selected];
-  const recipe = recipeFor(panel.photo)[state.selected];
-  state.panels[state.selected] = { photo: panel.photo, ...recipe };
+  const format = currentFormat();
+  const geom = layoutFor(format.width, format.height);
+  const target = geom.panels[state.selected] || geom.panels[0];
+  state.panels[state.selected] = { photo: panel.photo, ...cropFor(target, panel.photo) };
   sync();
   scheduleRender();
   setStatus('Panel framing reset', { stage: 'Panel reset' });
@@ -283,9 +326,10 @@ function surprise() {
 
   const jitter = (index) => {
     const pick = (min, max) => Number((min + Math.random() * (max - min)).toFixed(2));
-    if (index === 0) return { zoom: pick(1.0, 1.12), x: pick(0.16, 0.34), y: pick(0.08, 0.24) };
-    if (index === 1) return { zoom: pick(1.38, 1.62), x: pick(0.46, 0.56), y: pick(0.32, 0.44) };
-    return { zoom: pick(1.66, 1.94), x: pick(0.08, 0.24), y: pick(0.68, 0.88) };
+    const phase = index % 3;
+    if (phase === 0) return { zoom: pick(1.0, 1.12), x: pick(0.3, 0.6), y: pick(0.14, 0.32) };
+    if (phase === 1) return { zoom: pick(1.02, 1.16), x: pick(0.38, 0.62), y: pick(0.28, 0.44) };
+    return { zoom: pick(1.3, 1.7), x: pick(0.2, 0.8), y: pick(0.7, 0.9) };
   };
 
   state.panels = state.panels.map((panel, index) => ({ ...panel, ...jitter(index) }));
@@ -306,6 +350,7 @@ async function runExport() {
   const format = currentFormat();
   setStatus(`Rendering ${format.width} \u00d7 ${format.height} PNG\u2026`, { stage: 'Rendering PNG' });
   try {
+    await loadFonts();
     const result = await exportPng(state, state.format);
     setStatus(`Saved ${result.name} \u00b7 ${formatBytes(result.bytes)} \u00b7 ${result.ms} ms`, {
       stage: `${format.label} PNG \u00b7 ${formatBytes(result.bytes)}`,
@@ -534,13 +579,15 @@ function applyPreset(id) {
   state.grade = preset.grade;
   state.title = preset.title;
   state.kicker = preset.kicker;
-  state.panels = panelsFor(preset.photo);
+  const cast = [preset.photo, ...DEFAULT_CAST.filter((photo) => photo !== preset.photo)];
+  state.panels = panelsForCast(cast, preset.format);
   return true;
 }
 
 function setPhotoEverywhere(photoId) {
   if (!photos[photoId]) return;
-  state.panels = panelsFor(photoId);
+  const count = panelCountFor(modeFor(state.format));
+  state.panels = panelsForCast(Array(count).fill(photoId), state.format);
 }
 
 async function runShot(params) {
@@ -556,6 +603,19 @@ async function runShot(params) {
   const photo = params.get('photo');
   if (photo && photos[photo]) setPhotoEverywhere(photo);
 
+  const cast = params.get('cast');
+  if (cast) {
+    const ids = cast
+      .split(',')
+      .map((id) => id.trim())
+      .filter((id) => Boolean(SAMPLES[id]));
+    if (ids.length) {
+      const count = panelCountFor(modeFor(state.format));
+      const list = Array.from({ length: count }, (_, index) => ids[Math.min(index, ids.length - 1)]);
+      state.panels = panelsForCast(list, state.format);
+    }
+  }
+
   const style = params.get('style');
   if (style && GRADES[style]) state.grade = style;
 
@@ -565,10 +625,10 @@ async function runShot(params) {
   if (kicker !== null) state.kicker = kicker.toUpperCase().slice(0, CAPTION_KICKER_MAX);
 
   const panel = params.get('panel');
-  if (panel !== null) state.selected = clamp(Number(panel) || 0, 0, 2);
+  if (panel !== null) state.selected = clamp(Number(panel) || 0, 0, state.panels.length - 1);
 
   sync();
-  await document.fonts.ready;
+  await loadFonts();
   renderNow();
   await nextFrame();
   renderNow();
@@ -579,6 +639,7 @@ async function runShot(params) {
 async function init() {
   bindControls();
   sync();
+  await loadFonts();
   renderNow(); // An immediate painted cover, even before the samples decode.
 
   const loaded = await loadSamples();

@@ -1,6 +1,6 @@
 [
-  { "name": "1-hero.jpg", "query": "?shot=cover&format=wide&photo=boulevard&title=NEON%20TIDE&kicker=ONE%20BEACH.%20ONE%20NIGHT.&style=sunset&preset=hero", "w": 1280, "h": 720 },
-  { "name": "2-editor.jpg", "query": "?shot=editor&format=wide&photo=boulevard&title=NEON%20TIDE&kicker=ONE%20BEACH.%20ONE%20NIGHT.&style=sunset&preset=hero&panel=1", "w": 1280, "h": 720 },
-  { "name": "3-square.jpg", "query": "?shot=cover&format=square&photo=pier&title=LAST%20LIGHT&kicker=NO%20RULES.%20JUST%20SUNSET.&style=sunset&preset=square", "w": 1080, "h": 1080 },
-  { "name": "4-portrait.jpg", "query": "?shot=cover&format=portrait&photo=boulevard&title=GOLDEN%20EXIT&kicker=NO%20RULES.%20JUST%20NEON.&style=neon&preset=portrait", "w": 1024, "h": 1280 }
+  { "name": "1-hero.jpg", "query": "?shot=cover&format=wide&cast=cast-man,cast-driver,boulevard,cast-woman,pier,cast-blonde,cast-driver&title=NEON%20TIDE&kicker=ONE%20BEACH.%20ONE%20NIGHT.&style=sunset", "w": 1280, "h": 720 },
+  { "name": "2-editor.jpg", "query": "?shot=editor&format=wide&cast=cast-man,cast-driver,boulevard,cast-woman,pier,cast-blonde,cast-driver&title=NEON%20TIDE&kicker=ONE%20BEACH.%20ONE%20NIGHT.&style=sunset&panel=2", "w": 1280, "h": 720 },
+  { "name": "3-square.jpg", "query": "?shot=cover&format=square&cast=pier,cast-woman,cast-driver,boulevard,cast-blonde,cast-man&title=LAST%20LIGHT&kicker=NO%20RULES.%20JUST%20SUNSET.&style=sunset", "w": 1080, "h": 1080 },
+  { "name": "4-portrait.jpg", "query": "?shot=cover&format=portrait&cast=boulevard,cast-man,cast-driver,cast-woman,pier,cast-blonde,cast-man,boulevard&title=GOLDEN%20EXIT&kicker=NO%20RULES.%20JUST%20NEON.&style=neon", "w": 1024, "h": 1280 }
 ]

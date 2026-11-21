@@ -4,27 +4,31 @@
 [![make.fun rank badge](https://make.fun/badge/gta6-cover-art-01/SC0d3r/makefun-gta6-cover-art-01/rank.svg)](https://make.fun/bounty/gta6-cover-art-01)
 [![make.fun reward badge](https://make.fun/badge/gta6-cover-art-01/SC0d3r/makefun-gta6-cover-art-01/reward.svg)](https://make.fun/bounty/gta6-cover-art-01)
 
-Turn any photo into a printed GTA-style key-art one-sheet: a three-panel triptych, a huge title lockup over the panel seams, cast chips, a pull quote, a starburst seal, a cream footer band and a billing block, exported as a PNG you can post.
+Turn photos and a caption into a printed GTA-style key-art package: a hero mosaic of seven slanted panels, a sunset sky behind the gutters, a huge title across the seams, a script subtitle, cast chips, a star review strip, a tagline ribbon, a seal, a billing block and a barcode, exported as a PNG you can post.
 
 ## The cover package
 
 Every export is composed as one designed sheet, not a photo with a caption underneath.
 
-- **Title lockup.** A cream condensed grotesque fill with a tight deep-magenta offset and a dark keyline, uppercase, at most two lines. It overlaps the lower third of the panels, spans the seams, and keeps a clear margin from every canvas edge. The editable kicker sits underneath it.
-- **Cast chips.** One slanted black chip with a thin cream border per panel: THE DRIVER, THE FIXER, THE LOOKOUT.
-- **Pull quote and seal.** A five-star strip with a fictional pull quote from THE VICE HERALD, plus a small 12-point gold starburst seal reading ORIGINAL / COVER in the top corner.
-- **Footer band and billing block.** An edge-to-edge cream band with the tagline in dark condensed caps, a compact centred billing block, a simple barcode bottom-right and one A MAKE.FUN ORIGINAL line.
-- **Print finish.** A fine halftone dot pattern plus film grain over the whole sheet, with a single crushed-black sunset grade: amber highlights, teal/violet shadows and one light direction.
+- **Hero mosaic.** Wide uses seven slanted quads: a dominant 38 percent hero, a split left column, and two narrow right columns split into four panels. Square uses six panels, portrait uses eight. Each panel leans 0.03 of its height, keeps a 14 px gutter and a 16 px outer frame, and shows a different sample photo where possible.
+- **Sunset backdrop.** A plum to coral vertical sky, a striped sun disc, two palm silhouettes, an edge vignette, and a dark scrim under the hero's lower half. The gutters reveal the sky between panels.
+- **Title lockup.** Anton uppercase in warm cream, a dark keyline, a six pixel magenta offset shadow and a 1.5 degree tilt. It crosses the hero's lower half and both side columns, never sits in a band below the art.
+- **Script, ribbon and chips.** A Mr Dafoe sentence case subtitle under the title, a short cream tagline ribbon with pointed ends, and three black Bebas cast chips at the bottom left of safe panels.
+- **Review strip and seal.** Five gold stars with a short italic quote and source at the lower left, plus a two ring starburst seal at the upper right.
+- **Billing and barcode.** Three Bebas billing lines bottom left, a compact barcode bottom right and one tiny centred release line. There is no full width footer band.
+- **Grade and print finish.** A whole-poster sunset or neon pass after the panels, then warm highlights, magenta shadows, a fine halftone and light grain.
 
-Everything is drawn in code with system fonts and canvas shapes. No logo, no official artwork, no copied game font and no external image assets are used.
+Everything is drawn in code with the four bundled OFL fonts (Anton, Bebas Neue, Mr Dafoe and Archivo Black) and canvas shapes. The font files and their attribution live in `app/fonts/`, and the licence note is `app/fonts/FONT-LICENSES.md`. No logo, no official artwork, no copied game font and no external image assets are used.
+
+All six sample photos in `app/samples/` were made for make.fun with an image model and are free to use inside this entry. The samples are resized and graded at draw time only; nothing is uploaded or fetched from a remote host.
 
 ## What it does
 
-- **Any photo.** Upload or drag and drop a photo anywhere on the stage. Apply it to one panel or all three.
-- **Per-panel control.** Select a panel on the preview or with the LEFT / CENTRE / RIGHT control, then set zoom (1.0 to 2.2), horizontal and vertical crop. The selected panel gets a light cream ring; the two siblings dim by 15 percent; four haloed dots appear only while hovering or focusing. Drag a panel to reframe it.
-- **Three deliberate beats.** The default framing is not one pose re-cropped: the left panel is a wide establishing shot, the centre is the character portrait, and the right is a lower detail that keeps the whole hand or prop in context. Each format uses the same three-beat recipe.
+- **Any photo.** Upload or drag and drop a photo anywhere on the stage. Apply it to one panel or all panels.
+- **Per-panel control.** Select any panel on the preview or with the numbered panel row, then set zoom (1.0 to 2.2), horizontal and vertical crop. The selected panel gets a light cream ring; its siblings dim by 15 percent; four haloed dots appear only while hovering or focusing. Drag a panel to reframe it.
+- **Different photos per panel.** The default wide ticket runs cast-man, cast-driver, boulevard, cast-woman, pier, cast-blonde and a repeat. The sample buttons, `?photo=` and the `cast=` shot parameter all feed the same mosaic.
 - **Three grades.** Sunset, Neon and Dusk, applied consistently to every panel. Every default and screenshot uses a sunset or neon direction.
-- **FINISH toggle.** One switch in the rail shows or hides the cast chips, pull quote, seal, footer band and billing block, leaving the art and title lockup in place.
+- **FINISH toggle.** One switch in the rail shows or hides the cast chips, review strip, seal, ribbon, billing block and barcode, leaving the art and title lockup in place.
 - **Fast export.** One PNG at the current size. `Ctrl/Cmd + E` exports the current size. "Surprise me" shuffles the grade, title and panel framing. Filenames include the title, format and exact pixels, for example `neon-tide-wide-1920x1080.png`.
 - **Private and offline.** No network requests, no CDN, no analytics, no remote fonts. Photos never leave the device.
 

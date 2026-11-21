@@ -3,3 +3,6 @@ ocdata-b3/
 out/
 *.log
 *.tmp
+*.pid
+.DS_Store
+screenshots/*.tmp

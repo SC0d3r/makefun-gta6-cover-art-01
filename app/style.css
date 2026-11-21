@@ -1,5 +1,38 @@
 /* Vice Cover Studio - studio interface.
-   A compact left rail, a large live poster, and nothing that competes with the cover. */
+   A compact left rail, a large live poster, and nothing that competes with the cover.
+   The poster lettering uses four bundled OFL faces, served from app/fonts/. */
+
+@font-face {
+  font-family: 'Anton';
+  src: url('fonts/Anton-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Bebas Neue';
+  src: url('fonts/BebasNeue-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Mr Dafoe';
+  src: url('fonts/MrDafoe-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Archivo Black';
+  src: url('fonts/ArchivoBlack-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
 
 :root {
   --bg: #0a0611;
@@ -455,6 +488,16 @@ input:focus-visible {
   border: 1px solid var(--line);
   border-radius: 6px;
   background: #0f0a17;
+}
+
+.seg-panels {
+  grid-template-columns: repeat(8, 1fr);
+  height: 26px;
+}
+
+.seg-panels button {
+  font-size: 8.5px;
+  letter-spacing: 0.04em;
 }
 
 .seg button {
